@@ -1,7 +1,10 @@
 <script>
+  import AppMain from './components/AppMain.vue';
+  import AppHeader from './components/AppHeader.vue';
 
-import AppMain from './components/AppMain.vue';
-  export default{
+  
+
+  export default {
     name: 'App',
 
     data() {
@@ -10,18 +13,22 @@ import AppMain from './components/AppMain.vue';
 
     components: {
       AppMain,
+      AppHeader,
     }
   }
-
 </script>
 
 <template>
-
-  <AppMain></AppMain>
-
+  <AppHeader></AppHeader>
+  <div id="page-container" class="container py-5">
+    <router-view></router-view>
+  </div>
 </template>
 
 <style scoped>
 
-  
+#page-container > div {
+  height: 500px;
+}
+
 </style>

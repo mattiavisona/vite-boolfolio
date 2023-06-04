@@ -10,7 +10,11 @@ import ProjectItem from './ProjectItem.vue';
     data() {
         return{
 
-            projects: []
+            projects: [],
+
+            pagination: {},
+
+            apiURL: 'http://127.0.0.1:8000/api/projects',
 
         }
     },
@@ -20,16 +24,18 @@ import ProjectItem from './ProjectItem.vue';
     },
 
     mounted() {
-        this.getProject();
+        this.getProject(this.apiURL);
     },
 
     methods: {
-        getProject() {
-            axios.get('http://127.0.0.1:8000/api/projects').then(response => {
+        getProject(apiURL) {
+            axios.get(apiURL).then(response => {
                 console.log(response.data.results);
-                this.projects = response.data.results;
-            })
-        }
+                this.projects = response.data.results.data;
+
+                this.pagination = response.data.results;
+            });
+        },
     }
   }
 
@@ -48,6 +54,21 @@ import ProjectItem from './ProjectItem.vue';
     </div>
   </div>
 
+  <hr>
+
+  <div class="navigation-button">
+    <button v-for="link in pagination.links" 
+    class="btn" 
+    v-html="link.label" 
+    :class="link.active ? 'btn-primary' : 'btn-outline-secondary'" 
+    :disabled="link.url == null ? true : false"
+    @click="getProject(link.url)"
+    >
+        
+    </button>
+  </div>
+
+
 
 </template>
 
@@ -58,6 +79,12 @@ import ProjectItem from './ProjectItem.vue';
         padding: 35px 0px;
 
         color:rgba(206, 18, 18, 0.363)
+    }
+
+    .navigation-button{
+        display: flex;
+        gap: 7px;
+        justify-content: center;
     }
 
 </style>
